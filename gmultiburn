@@ -1,0 +1,89 @@
+#!/bin/bash
+#Zenity front-end to 'multiburn'
+#Copyright David Stark 2007
+
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License version 2 as published by
+#the Free Software Foundation.
+
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details:
+#http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+#Any questions or suggestions at all, email me at: dave@davidstark.name
+
+GDTYPE=`zenity --list --text="Chose the disc type" --radiolist --column="Select" --column="Disk Type" false "Data CD" false "Audio CD" false "DVD"` || exit 1
+case "$GDTYPE" in
+    "Data CD")
+	DISCTYPEARG="--datacd"
+	GSTYPE=`zenity --list --text="Chose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File"` || exit 1;;
+    "Audio CD")
+	DISCTYPEARG="--audiocd"
+	GSTYPE=`zenity --list --text="Chose the data source type" --radiolist --column="Select" --column="Data Type" false "TOC/Cue File" false "Disc Drive" false "Audio Directory" false "Single Audio File"` || exit 1;;
+    "DVD")
+	DISCTYPEARG="--dvd"
+	GSTYPE=`zenity --list --text="Chose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File"` || exit 1;;
+    *)
+	exit 1;;
+esac
+
+case "$GSTYPE" in
+    "Disc Image")
+	BURNTYPEARG="-i";;
+    "Disc Drive")
+	BURNTYPEARG="-c";;
+    "Data Directory")
+	BURNTYPEARG="-d";;
+    "Single Data File")
+	BURNTYPEARG="-d";;
+    "TOC/Cue File")
+	BURNTYPEARG="-t";;
+    "Audio Directory")
+	BURNTYPEARG="-a";;
+    "Single Audio File")
+	BURNTYPEARG="-s";;
+    *)
+	exit 1;;
+esac
+
+GOPTS=`zenity --list --separator=':' --text="Choose burn options" --checklist --column="Select" --column="Option" false "Dummy Run" false "Retain Scratch Directory" false "Eject Burners Before First Burn"` || exit 1
+OPTARGS=""
+if echo "$GOPTS" | grep "Dummy Run" &> /dev/null
+    then
+    OPTARGS="$OPTARGS --dummy"
+fi
+if echo "$GOPTS" | grep "Retain Scratch Directory" &> /dev/null
+    then
+    OPTARGS="$OPTARGS --keep"
+fi
+if echo "$GOPTS" | grep "Eject Burners Before First Burn" &> /dev/null
+    then
+    OPTARGS="$OPTARGS --eject"
+fi
+
+zenity --info --text="Please choose the data source in the next window."
+
+case "$GSTYPE" in
+    "Disc Image" | "TOC/Cue File" | "Single Audio File" | "Single Data File")
+	SOURCEARG=`zenity --file-selection` || exit 1;;
+    "Data Directory" | "Audio Directory")
+	SOURCEARG=`zenity --file-selection --directory` || exit 1;;
+    "Disc Drive")
+	SOURCEARG=`zenity --file-selection --filename="/dev/"` || exit 1;;
+    *)
+	exit 1;;
+esac
+
+zenity --info --text="Please choose the burners to use in the next window.\nUse Ctrl-click to select multiple devices."
+ 
+BURNERSARG=`zenity --file-selection --multiple --separator=' ' --filename="/dev/"` || exit 1
+
+COMMAND="multiburn $DISCTYPEARG $BURNTYPEARG \"$SOURCEARG\" $OPTARGS $BURNERSARG"
+
+echo "Burn command:"
+echo $COMMAND
+echo
+
+multiburn $DISCTYPEARG $BURNTYPEARG "$SOURCEARG" $OPTARGS $BURNERSARG
