@@ -1,0 +1,28 @@
+# Configuration file for gmultiburn
+# This file can be used to configure defaults for gmultiburn to your liking.
+# copy this file to ~/.gmultiburn and edit to meet your needs.
+
+# The following variables are set to false in the script if not set true here. True means the radio button will be selected.
+
+### Disc Type - prefix dt
+#dtdatacd=true
+#dtaudiocd=true
+#dtdvd=true
+
+### Data CD, data source type - prefix dcddst
+#dcddstdiscimage=true
+#dcddstdiscdrive=true
+#dcddstdatadirectory=true
+#dcddstsingledatafile=true
+
+### Audio CD, data source type - prefix acddst
+#acddsttoccuefile=true
+#acddstdiscdrive=true
+#acddstaudiodirectory=true
+#acddstsingleaudiofile=true
+
+### DVD, data source type - prefix dvddst
+#dvddstdiscimage=true
+#dvddstdiscdrive=true
+#dvddstdatadirectory=true
+#dvddstsingledatafile=true
