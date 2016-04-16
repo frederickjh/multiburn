@@ -23,17 +23,17 @@ fi
 }
 
 function choosedisctypeandsourcetype(){
-GDTYPE=`zenity --list --text="Choose the disc type" --radiolist --column="Select" --column="Disk Type" false "Data CD" false "Audio CD" false "DVD"` || exit 1
+GDTYPE=`zenity --list --text="Choose the disc type" --radiolist --column="Select" --column="Disk Type" false "Data CD" false "Audio CD" false "DVD"  --width=200 --height=200` || exit 1
 case "$GDTYPE" in
     "Data CD")
 	DISCTYPEARG="--datacd"
-	GSTYPE=`zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File"` || exit 1;;
+	GSTYPE=`zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File"--width=200 --height=240` || exit 1;;
     "Audio CD")
 	DISCTYPEARG="--audiocd"
-	GSTYPE=`zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "TOC/Cue File" false "Disc Drive" false "Audio Directory" false "Single Audio File"` || exit 1;;
+	GSTYPE=`zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "TOC/Cue File" false "Disc Drive" false "Audio Directory" false "Single Audio File"--width=200 --height=240` || exit 1;;
     "DVD")
 	DISCTYPEARG="--dvd"
-	GSTYPE=`zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File"` || exit 1;;
+	GSTYPE=`zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File"--width=200 --height=240` || exit 1;;
     *)
 	exit 1;;
 esac
