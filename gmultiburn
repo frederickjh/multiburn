@@ -22,6 +22,12 @@ exit
 fi
 }
 
+function loadconfigifexists(){
+  if [ -f $HOME/.gmultiburn ]; then
+    source $HOME/.gmultiburn
+  fi
+}
+
 function setradiobuttondefaultselections(){
   for button in dtdatacd dtaudiocd dtdvd dcddstdiscimage dcddstdiscdrive dcddstdatadirectory dcddstsingledatafile acddsttoccuefile acddstdiscdrive acddstaudiodirectory acddstsingleaudiofile dvddstdiscimage dvddstdiscdrive dvddstdatadirectory dvddstsingledatafile ;do
   [ -v ${button} ]  || eval $button="false"
@@ -121,6 +127,7 @@ multiburn $DISCTYPEARG $BURNTYPEARG "$SOURCEARG" $OPTARGS $BURNERSARG  | zenity 
 ####### MAIN PROGRAMM #########
 
 iszenityinstalled
+loadconfigifexists
 setradiobuttondefaultselections
 choosedisctypeandsourcetype
 setdisctypeoptions
