@@ -107,7 +107,7 @@ echo
 }
 
 function runmulitburn(){
-multiburn $DISCTYPEARG $BURNTYPEARG "$SOURCEARG" $OPTARGS $BURNERSARG  | zenity --text-info --title="INFO" --width=350 --height=400 --screen=0
+multiburn "$DISCTYPEARG $BURNTYPEARG "$SOURCEARG" $OPTARGS $BURNERSARG"  | zenity --text-info --title="INFO" --width=350 --height=400 --screen=0
 }
 ####### MAIN PROGRAMM #########
 
