@@ -22,18 +22,28 @@ exit
 fi
 }
 
+function setradiobuttondefaultselections(){
+  for button in dtdatacd dtaudiocd dtdvd dcddstdiscimage dcddstdiscdrive dcddstdatadirectory dcddstsingledatafile acddsttoccuefile acddstdiscdrive acddstaudiodirectory acddstsingleaudiofile dvddstdiscimage dvddstdiscdrive dvddstdatadirectory dvddstsingledatafile ;do
+  [ -v ${button} ]  || eval $button="false"
+  done
+}
+
 function choosedisctypeandsourcetype(){
-GDTYPE=$(zenity --list --text="Choose the disc type" --radiolist --column="Select" --column="Disk Type" false "Data CD" false "Audio CD" false "DVD" --height=250) || exit 1
+# dt prefix
+GDTYPE=$(zenity --list --text="Choose the disc type" --radiolist --column="Select" --column="Disk Type" ${dtdatacd} "Data CD" ${dtaudiocd} "Audio CD" ${dtdvd} "DVD" --height=250) || exit 1
 case "$GDTYPE" in
     "Data CD")
+# dcddst prefix
 	DISCTYPEARG="--datacd"
-	GSTYPE=$(zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File" --height=280) || exit 1;;
+	GSTYPE=$(zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" ${dcddstdiscimage} "Disc Image" ${dcddstdiscdrive} "Disc Drive" ${dcddstdatadirectory} "Data Directory" ${dcddstsingledatafile} "Single Data File" --height=280) || exit 1;;
     "Audio CD")
+# acddst prefix
 	DISCTYPEARG="--audiocd"
-	GSTYPE=$(zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "TOC/Cue File" false "Disc Drive" false "Audio Directory" false "Single Audio File" --height=280) || exit 1;;
+	GSTYPE=$(zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" ${acddsttoccuefile} "TOC/Cue File" ${acddstdiscdrive} "Disc Drive" ${acddstaudiodirectory} "Audio Directory" ${acddstsingleaudiofile} "Single Audio File" --height=280) || exit 1;;
     "DVD")
+# dvddst prefix
 	DISCTYPEARG="--dvd"
-	GSTYPE=$(zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" false "Disc Image" false "Disc Drive" false "Data Directory" false "Single Data File" --height=280) || exit 1;;
+	GSTYPE=$(zenity --list --text="Choose the data source type" --radiolist --column="Select" --column="Data Type" ${dvddstdiscimage} "Disc Image" ${dvddstdiscdrive} "Disc Drive" ${dvddstdatadirectory} "Data Directory" ${dvddstsingledatafile} "Single Data File" --height=280) || exit 1;;
     *)
 	exit 1;;
 esac
@@ -61,7 +71,7 @@ esac
 }
 
 function setburnoptions(){
-GOPTS=$(zenity --list --separator=':' --text="Choose burn options" --checklist --column="Select" --column="Option" false "Dummy Run" false "Retain Scratch Directory" false "Eject Burners Before First Burn") || exit 1
+GOPTS=$(zenity --list --separator=':' --text="Choose burn options" --checklist --column="Select" --column="Option" false "Dummy Run" false "Retain Scratch Directory" false "Eject Burners Before First Burn" --height=280 --width=450) || exit 1
 OPTARGS=""
 if echo "$GOPTS" | grep "Dummy Run" &> /dev/null
     then
@@ -111,6 +121,7 @@ multiburn $DISCTYPEARG $BURNTYPEARG "$SOURCEARG" $OPTARGS $BURNERSARG  | zenity 
 ####### MAIN PROGRAMM #########
 
 iszenityinstalled
+setradiobuttondefaultselections
 choosedisctypeandsourcetype
 setdisctypeoptions
 setburnoptions
