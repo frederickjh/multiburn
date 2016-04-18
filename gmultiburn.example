@@ -26,3 +26,6 @@
 #dvddstdiscdrive=true
 #dvddstdatadirectory=true
 #dvddstsingledatafile=true
+
+### Default folder / files that open in file / folder selection dialogs
+#defaultaudiodirectory="$HOME/Music/"
