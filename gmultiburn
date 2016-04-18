@@ -30,7 +30,15 @@ function loadconfigifexists(){
 
 function setradiobuttondefaultselections(){
   for button in dtdatacd dtaudiocd dtdvd dcddstdiscimage dcddstdiscdrive dcddstdatadirectory dcddstsingledatafile acddsttoccuefile acddstdiscdrive acddstaudiodirectory acddstsingleaudiofile dvddstdiscimage dvddstdiscdrive dvddstdatadirectory dvddstsingledatafile ;do
-  [ -v ${button} ]  || eval $button="false"
+  [ -v ${button} ]  || eval ${button}="false"
+  done
+}
+
+function zenityfilenameoptionvariables(){
+# Set directory or filename to pull up in a file section dialog variable to null if it does not exist otherwise add the --filename= switch in front of it.
+  for variabletoprocess in defaultaudiodirectory ; do
+    variabletoproccessvalue="$(eval printf %s \"\$$variabletoprocess\")"
+    [ -v ${variabletoprocess} ] && eval ${variabletoprocess}="--filename=${variabletoproccessvalue}" || eval ${variabletoprocess}=""
   done
 }
 
@@ -98,8 +106,10 @@ function selectdatasource(){
 case "$GSTYPE" in
     "Disc Image" | "TOC/Cue File" | "Single Audio File" | "Single Data File")
 	SOURCEARG=$(zenity --title="Please choose the data source (File)" --file-selection) || exit 1;;
-    "Data Directory" | "Audio Directory")
-	SOURCEARG=$(zenity --title="Please choose the data source (Directory)" --file-selection --directory) || exit 1;;
+    "Data Directory")
+  SOURCEARG=$(zenity --title="Please choose the data source (Data Directory)" --file-selection --directory) || exit 1;;
+    "Audio Directory")
+	SOURCEARG=$(zenity --title="Please choose the data source (Audio Directory)" --file-selection --directory ${defaultaudiodirectory}) || exit 1;;
     "Disc Drive")
 	SOURCEARG=$(zenity --title="Please choose the data source (Drive)" --file-selection --filename="/dev/") || exit 1;;
     *)
@@ -129,6 +139,7 @@ multiburn $DISCTYPEARG $BURNTYPEARG "$SOURCEARG" $OPTARGS $BURNERSARG  | zenity 
 iszenityinstalled
 loadconfigifexists
 setradiobuttondefaultselections
+zenityfilenameoptionvariables
 choosedisctypeandsourcetype
 setdisctypeoptions
 setburnoptions
