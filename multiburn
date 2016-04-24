@@ -790,7 +790,7 @@ POSTGAP=""
 EJECT=false
 
 #Default scratch directory
-SCRATCHDIR="$PWD/.multiburn"
+SCRATCHDIR="/tmp/.multiburn"
 
 #Default is to rm -rf the scratch dir on exit
 RMSCRATCHDIR=true
